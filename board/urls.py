@@ -16,6 +16,5 @@ urlpatterns = [
 		url(r'^posts/new', PostCreateView.as_view(), name='post-create'),
 		url(r'^posts/(?P<pk>\d+)/edit/', PostUpdateView.as_view(), name='post-update'),
 	    url(r'^posts/(?P<pk>\d+)/delete/', PostDeleteView.as_view(), name='post-delete'),
-
 		url(r'^posts/js', PostTestView.as_view(), name='post-test'),
 ]
