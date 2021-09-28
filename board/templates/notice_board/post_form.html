@@ -1,0 +1,75 @@
+{% extends './base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2> POST </h2>
+        <form method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+            <div class="editor">
+                 <br>
+{# FORM FIELDS  #}
+                <p>title <input type="text" name="title" maxlength="100" placeholder="Enter title" required="required" id="id_title">
+                        <span id="span_title"></span></p>
+
+                <p>author <select name="author" required="" id="id_author">
+                <option value="" selected="">---------</option>
+                <option value="1">dayeon-board</option>
+                </select> <span id="span_author"></span></p></p>
+                <p><textarea name="body" cols="40" rows="10" required="" id="id_body" placeholder="Enter content"></textarea></p>
+                <p><input type="file" name="file" id="id_file"></p>
+            </div>
+{# SUBMIT BUTTON#}
+            <div class="submit">
+
+{#                <input type="submit" value="post">#}
+                <input type="reset" value="reset">
+                <input type="submit" name="btnsubmit"  value="submit" onclick="return validate()"/>
+            </div>
+        </form>
+    <div class="btn_back">
+        <br><br>
+        <a href="/notice-board/">Return to post list</a>
+    </div>
+</div>
+
+{# CSS #}
+    <style type="text/css">
+    span {
+        color:red;
+    }
+    </style>
+
+{# JAVA SCRIPT #}
+    <script type="text/javascript">
+    // {# FORM FIELDS#}
+        function validate() {
+           // alert("hi");
+            var title = document.getElementById("id_title").value;
+            var body = document.getElementById("id_body").value;
+            var author = document.getElementById("id_author").value;
+
+
+            if(title == "")
+            {
+                document.getElementById("span_title").innerHTML="Empty title: please write something"
+                //alert("Empty title");
+                return false;
+
+            }
+            if(body == "")
+            {
+                alert("Emtpy content: please write something");
+                return false;
+            }
+
+            if(author == "")
+            {
+                document.getElementById("span_author").innerHTML="Empty author: Please select the author"
+                //alert("Please select the author");
+                return false;
+            }
+        }
+
+    </script>
+
+{% endblock content %}

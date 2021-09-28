@@ -1,0 +1,37 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block post_header %}
+    <div class="container">
+        <h1>글쓰기</h1>
+    </div>
+{% endblock post_header %}
+
+{% block content %}
+    <h1> Post </h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="editor">
+                <p>{{form.title}}</p>
+                {% for error in form.title.errors %}
+                    <p class="error">{{error}}</p>
+                {% endfor %}
+                <p>{{form.author}}</p>
+                <p>{{form.body}}</p>
+                {% for error in form.body.errors %}
+                    <p class="error">{{error}}</p>
+                {% endfor %}
+                <p>{{form.file}}</p>
+            </div>
+            <div class="submit">
+                <input type="submit" value="post">
+            </div>
+        </form>
+    <div class="btn_back">
+        <a href="{% url 'board:notice-board' %}" >Return to post list</a>
+    </div>
+{% endblock content %}

@@ -1,0 +1,73 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'object_list/css/post_list.css' %}">
+{% endblock css %}
+
+{% block content %}
+    <!-- post list -->
+    <div class="btn_post">
+        <h3>Post List | <a href="{% url 'board:post-create'%}">Post</a> </h3>
+        <hr>
+    </div>
+
+    {% if object_list.exists %}
+        <div class="post_container">
+            {% for post in object_list %}
+                <div class="post"><a href="{% url 'board:post-detail' post.id %}">
+                    <h2 class="title">{{post.title}}</h2></a>
+                    <p class="author">{{ post.author.username }}</p>
+                    <p class="date">{{ post.post_date }}</p>
+                    <p class="text">{{post.content}}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="paginator">
+        <hr>
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="first">first</a>
+                <a href="?page={{page_obj.previous_page_number}}" class="prev">prev</a>
+            {% endif %}
+
+            <span class="page">
+                <p>{{page_obj.number}} of {{page_obj.paginator.num_pages}}</p>
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{page_obj.next_page_number}}" class="next">next</a>
+                <a href="?page={{page_obj.paginator.num_pages}}" class="last">last</a>
+            {% endif %}
+        </div>
+        <br>
+
+    {% else %}
+        <div class="blank">
+            <p>No post yet.</p>
+        </div>
+    {% endif %}
+
+<!-- FILTER -->
+    <h3>Search</h3>
+    <form method="get" class="form-style">
+        <div class="bytitle">
+            <label for="id_title__icontains">by Title</label>
+            <input type="text" name="title__icontains" class="form-control is-valid form-style" placeholder="enter text" title="" id="id_title__icontains">
+        </div>
+
+        <div class="bybody">
+            <label for="id_body__icontains">by content</label>
+            <input type="text" name="body__icontains" class="form-control is-valid" placeholder="enter text" title="" id="id_body__icontains">
+        </div>
+
+            <br>
+            <div class="button">
+                <input type="submit" name="btnsubmit"  value="search">
+                <input type="reset" value="reset">
+                <a href="{% url 'board:notice-board' %}">Refresh</a>
+            </div>
+    </form>
+</div>
+
+{% endblock content %}

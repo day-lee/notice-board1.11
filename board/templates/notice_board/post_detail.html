@@ -1,0 +1,49 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'posts/css/post_detail.css' %}">
+{% endblock css %}
+
+{% block post_header %}
+    <div class="container">
+        <h1 class="title">{{post.title}}</h1>
+        <p class="date">{{post.date_created}}</p>
+    </div>
+{% endblock post_header %}
+
+{% block content %}
+    <div class="content">
+        <div class="container">
+        <h2 class="title">{{post.title}}</h2>
+        <p class="date">{{post.author}}</p>
+        <p class="date">{{post.post_date}}</p>
+        <hr>
+
+        <p class="text">{{post.body|linebreaksbr}}</p>
+        <p class="file"> To check if file is uploaded: {{post.file}}</p>
+        <hr>
+
+        </div>
+    </div>
+    <div class="btn">
+        <div class="btn_list"><a href="{% url 'board:notice-board' %}">Back to list</a></div>
+        <div class="right-btn">
+            <div class="btn_modify"><a href="{% url 'board:post-update' post.id %}">Edit</a></div>
+            <div class="btn_delete"><a href="{% url 'board:post-delete' post.id %}">Delete</a></div>
+        </div>
+    </div>
+{% endblock content %}
+
+
+
+                <h2 class="title">{{post.title}}</h2></a>
+                    <p class="author">{{ post.author.username }}</p>
+                    <p class="date">{{ post.post_date }}</p>
+                    <p class="text">{{post.body|slice:":100"}}</p>
+
+
+
+
+
+
