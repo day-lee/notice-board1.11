@@ -7,7 +7,7 @@
          {% csrf_token %}
             <div class="editor">
                  <br>
-{# FORM FIELDS  #}
+<!--{# FORM FIELDS  #}-->
                 <p>title <input type="text" name="title" maxlength="100" placeholder="Enter title" required="required" id="id_title">
                         <span id="span_title"></span></p>
 
@@ -18,10 +18,10 @@
                 <p><textarea name="body" cols="40" rows="10" required="" id="id_body" placeholder="Enter content"></textarea></p>
                 <p><input type="file" name="file" id="id_file"></p>
             </div>
-{# SUBMIT BUTTON#}
+<!--{# SUBMIT BUTTON#}-->
             <div class="submit">
 
-{#                <input type="submit" value="post">#}
+<!--{#                <input type="submit" value="post">#}-->
                 <input type="reset" value="reset">
                 <input type="submit" name="btnsubmit"  value="submit" onclick="return validate()"/>
             </div>
