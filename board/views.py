@@ -17,13 +17,6 @@ class PostListView(ListView):
         filter = PostFilter(self.request.GET, queryset)
         return filter.qs
 
-    def get_context_data(self, **kwargs):
-        context = super(PostListView, self).get_context_data(**kwargs)
-        queryset = self.get_queryset()
-        filter = PostFilter(self.request.GET, queryset)
-        context["filter"] = filter
-        return context
-
 
 class PostDetailView(DetailView):
     model = Post
