@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.urls import reverse_lazy
-from django.views.generic import (ListView, DetailView, CreateView, UpdateView, DeleteView
-                                  )
+from django.views.generic import (ListView, DetailView, CreateView, UpdateView, DeleteView)
 from .models import Post
 from .filters import PostFilter
 #from .forms import PostForm, EditForm
@@ -10,7 +9,6 @@ from .filters import PostFilter
 class PostListView(ListView):
     model = Post
     template_name = 'notice_board/post_list.html'
-    # context_object_name = 'posts'
     ordering = ['-post_created']
     paginate_by = 5
 
@@ -37,8 +35,9 @@ class PostCreateView(CreateView):
     model = Post
     template_name = 'notice_board/post_form.html'
 
-    #update JS: currently not working
     #template_name = 'notice_board/post_form_feedback.html'
+    #templatfor updated JS: currently not working
+
     fields = '__all__'
     #form_class = PostForm #returns 'FileField' object has no attribute 'use_required_attribute' error
 
