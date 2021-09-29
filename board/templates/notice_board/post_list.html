@@ -8,13 +8,23 @@
     </div>
 
     {% if object_list.exists %}
-        <div class="post_container">
-            {% for post in object_list %}
-                <div class="post"><a href="{% url 'board:post-detail' post.id %}">
-                    <h2 class="title">{{post.title}}</h2></a> {{ post.author.username }} {{ post.post_date }}
-                </div>
-            {% endfor %}
-        </div>
+    <table class="table">
+            <tr>
+              <th>title</th>
+              <th>author</th>
+              <th>date</th>
+            </tr>
+        <tbody>
+            <tr>
+        {% for post in object_list %}
+              <td style="text-align:left"><a href="{% url 'board:post-detail' post.id %}">
+                    {{ post.title }}</a></td>
+              <td>{{ post.author.username }}</td>
+              <td>{{ post.post_date}}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
 
         <div class="paginator">
         <hr>
