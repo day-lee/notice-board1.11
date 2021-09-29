@@ -8,22 +8,18 @@
             <div class="editor">
                  <br>
 <!--{# FORM FIELDS  #}-->
-                <p>title <input type="text" name="title" maxlength="100" placeholder="Enter title" required="required" id="id_title">
-                        <span id="span_title"></span></p>
-
-                <p>author <select name="author" required="" id="id_author">
-                <option value="" selected="">---------</option>
-                <option value="1">dayeon-board</option>
-                </select> <span id="span_author"></span></p></p>
-                <p><textarea name="body" cols="40" rows="10" required="" id="id_body" placeholder="Enter content"></textarea></p>
-                <p><input type="file" name="file" id="id_file"></p>
+                <label for="title">title</label> <input type="text" name="title" maxlength="100" placeholder="Enter title" id="id_title">
+                 <p> author: {{form.author}}</p>
+                <label for="body"></label><textarea name="body" cols="40" rows="10" id="id_body" placeholder="Enter content"></textarea>
+                <div class="file-upload">
+                    <label for="file"></label><input type="file" name="file" id="id_file">
+                </div>
+                <br><br>
             </div>
 <!--{# SUBMIT BUTTON#}-->
             <div class="submit">
-
-<!--{#                <input type="submit" value="post">#}-->
                 <input type="reset" value="reset">
-                <input type="submit" name="btnsubmit"  value="submit" onclick="return validate()"/>
+                <input type="submit" name="submit"  value="submit" onclick="return validate()"/>
             </div>
         </form>
     <div class="btn_back">
@@ -32,43 +28,34 @@
     </div>
 </div>
 
-{# CSS #}
-    <style type="text/css">
-    span {
-        color:red;
-    }
-    </style>
 
-{# JAVA SCRIPT #}
+<!--{# JAVA SCRIPT #}-->
     <script type="text/javascript">
-    // {# FORM FIELDS#}
-        function validate() {
-           // alert("hi");
-            var title = document.getElementById("id_title").value;
-            var body = document.getElementById("id_body").value;
-            var author = document.getElementById("id_author").value;
+    window.addEventListener("load", function(){
+        let form = document.querySelector("form");
+            form.addEventListener("submit", function(event) {
+                let title = document.querySelector("input[name=title]");
+                let body = document.querySelector("textarea[name=body]");
+
+                    if(title.value === ""){
+                        alert("타이틀 입력");
+                        title.focus();
+                        return false;
+                    }
+
+                    else if(body.value === ""){
+                        alert("내용 입력");
+                        title.focus();
+                        return false;
+                    }
 
 
-            if(title == "")
-            {
-                document.getElementById("span_title").innerHTML="Empty title: please write something"
-                //alert("Empty title");
-                return false;
+            });
+    });
 
-            }
-            if(body == "")
-            {
-                alert("Emtpy content: please write something");
-                return false;
-            }
 
-            if(author == "")
-            {
-                document.getElementById("span_author").innerHTML="Empty author: Please select the author"
-                //alert("Please select the author");
-                return false;
-            }
-        }
+    let name = "{{ user.id }}";
+    document.getElementById("id_author").value = name;
 
     </script>
 
