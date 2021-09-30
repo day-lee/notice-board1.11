@@ -220,6 +220,6 @@ secrets.json
 
 # End of https://www.toptal.com/developers/gitignore/api/django,python
 
-/board/templates/notice_board/form_js_test.html
-/board/templates/notice_board/post_form_test.html
-/board/templates/notice_board/post_form_feedback.html
+/board/templates/board/form_js_test.html
+/board/templates/board/post_form_test.html
+/board/templates/board/post_form_feedback.html
