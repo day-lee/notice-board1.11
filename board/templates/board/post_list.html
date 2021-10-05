@@ -1,15 +1,15 @@
 {% extends './base.html' %}
 
 {% block content %}
-    <!-- post list -->
+<!-- post list -->
     <div class="btn_post">
-        <h3>Post List | <a href="{% url 'board:post-create'%}">Post</a> </h3>
+        <h3>Post List | <a href="{% url 'board:post-create'%}">Post</a></h3>
         <hr>
     </div>
-
-    {% if object_list.exists %}
+{% if object_list.exists %}
     <table class="table">
             <tr>
+              <th>number</th>
               <th>title</th>
               <th>author</th>
               <th>date</th>
@@ -17,6 +17,7 @@
         <tbody>
             <tr>
         {% for post in object_list %}
+              <td>{{ post.id }}</td>
               <td style="text-align:left"><a href="{% url 'board:post-detail' post.id %}">
                     {{ post.title }}</a></td>
               <td>{{ post.author.username }}</td>
