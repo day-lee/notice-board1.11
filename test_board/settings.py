@@ -77,6 +77,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+        'libraries':  {
+                        'pagination_extras': 'board.templatetags.pagination_extras',
+                    }
         },
     },
 ]

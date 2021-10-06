@@ -5,6 +5,8 @@ from django.views.generic import (ListView, DetailView, CreateView, UpdateView, 
 from .models import Post
 from .filters import PostFilter
 #from .forms import PostForm, EditForm
+from django.contrib import messages
+from django.db.models import Q
 
 class PostListView(ListView):
     model = Post
@@ -12,11 +14,48 @@ class PostListView(ListView):
     ordering = ['-post_created']
     paginate_by = 5
 
-    def get_queryset(self):
-        queryset = super(PostListView, self).get_queryset()
-        filter = PostFilter(self.request.GET, queryset)
-        return filter.qs
+    # def get_queryset(self):
+    #     queryset = super(PostListView, self).get_queryset()
+    #     filter = PostFilter(self.request.GET, queryset)
+    #     return filter.qs
 
+
+# title 과 body 를 같이 검색하려면 get_queryset, get_context_data, Q를 이용해야함
+#     def get_queryset(self):
+#         search_keyword = self.request.GET.get('q', '')
+#         search_type = self.request.GET.get('type', '')
+#         notice_list = Post.objects.order_by('-id')
+#
+#         if search_keyword:
+#             if len(search_keyword) > 1:
+#                 if search_type == 'all':
+#                     search_notice_list = notice_list.filter(
+#                         Q(title__icontains=search_keyword) | Q(body__icontains=search_keyword) | Q(
+#                             author__user_id__icontains=search_keyword))
+#                 elif search_type == 'title_content':
+#                     search_notice_list = notice_list.filter(
+#                         Q(title__icontains=search_keyword) | Q(body__icontains=search_keyword))
+#                 elif search_type == 'title':
+#                     search_notice_list = notice_list.filter(title__icontains=search_keyword)
+#                 elif search_type == 'body':
+#                     search_notice_list = notice_list.filter(body__icontains=search_keyword)
+#                 elif search_type == 'author':
+#                     search_notice_list = notice_list.filter(author__user_id__icontains=search_keyword)
+#
+#                 return search_notice_list
+#             else:
+#                 messages.error(self.request, '검색어는 2글자 이상 입력해주세요.')
+#         return notice_list
+#
+#     def get_context_data(self, **kwargs):
+#         search_keyword = self.request.GET.get('q', '')
+#         search_type = self.request.GET.get('type', '')
+#
+#         if len(search_keyword) > 1:
+#             context['q'] = search_keyword
+#         context['type'] = search_type
+#
+#         return context
 
 class PostDetailView(DetailView):
     model = Post
