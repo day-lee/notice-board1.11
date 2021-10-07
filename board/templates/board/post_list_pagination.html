@@ -5,6 +5,7 @@
 {% block body %}
     <!-- post list -->
     <div class="btn_post">
+        <h1>Pagination Test</h1>
         <h3><a href="{% url 'board:notice-board' %}"> Post List </a> | <a href="{% url 'board:post-create'%}"> Post </a> </h3>
         <hr>
     </div>
@@ -35,9 +36,12 @@
               <td>{{ post.post_date|date:'Y-m-d'}}</td>
             </tr>
         </tbody>
-
         {% endfor %}
-                {% endif %}
+
+    {% else %}
+        No post yet.
+    {% endif %}
+
     </table>
 <!--1111111111111111111111111 1 Pagination 1111111111111 1111111111111 -->
 <!--        <div class="paginator">-->

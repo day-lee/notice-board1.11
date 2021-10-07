@@ -10,6 +10,8 @@ class PostFilter(django_filters.FilterSet):
         fields = {
                    'title': ['icontains'],
                    'body': ['icontains'],
+                   'author_id': ['exact'],
+
         }
 
 

@@ -11,16 +11,40 @@ from django.db.models import Q
 
 class PostListView(ListView):
     model = Post
-    template_name = 'board/post_list.html'
+    #template_name = 'board/post_list.html'
+    template_name = 'board/post_list_filter.html'
     ordering = ['-post_created']
     paginate_by = 5
     context_object_name = 'object_list'
 
     def get_queryset(self):
+        search_keyword = self.request.GET.get('q', '')
+        search_type = self.request.GET.get('type', '')
         object_list = Post.objects.order_by('-id')
+
+        if search_keyword:
+            if len(search_keyword) > 1:
+                if search_type == 'all':
+                    search_object_list = object_list.filter(
+                        Q(title__icontains=search_keyword) | Q(body__icontains=search_keyword)
+                        | Q(author__username__icontains=search_keyword))
+                elif search_type == 'title_body':
+                    search_object_list = object_list.filter(
+                        Q(title__icontains=search_keyword) | Q(body__icontains=search_keyword))
+                elif search_type == 'title':
+                    search_object_list = object_list.filter(title__icontains=search_keyword)
+                elif search_type == 'body':
+                    search_object_list = object_list.filter(body__icontains=search_keyword)
+                elif search_type == 'author__username':
+                    search_object_list = object_list.filter(author__username__icontains=search_keyword)
+
+                return search_object_list
+            else:
+                messages.error(self.request, '검색어는 2글자 이상 입력해주세요.')
         return object_list
 
     def get_context_data(self, **kwargs):
+        #pagination
         context = super(PostListView, self).get_context_data(**kwargs)
         paginator = context['paginator']
         page_numbers_range = 5
@@ -33,9 +57,18 @@ class PostListView(ListView):
         end_index = start_index + page_numbers_range
         if end_index >= max_index:
             end_index = max_index
-
         page_range = paginator.page_range #[start_index:end_index]
         context['page_range'] = page_range
+
+        #filter
+        search_keyword = self.request.GET.get('q', '')
+        search_type = self.request.GET.get('type', '')
+        notice_fixed = Post.objects.all().order_by('-id')
+
+        if len(search_keyword) > 1:
+            context['q'] = search_keyword
+        context['type'] = search_type
+        context['notice_fixed'] = notice_fixed
 
         return context
 
