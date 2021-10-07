@@ -16,7 +16,12 @@
         <hr>
 
         <p class="text">{{post.body|linebreaksbr}}</p>
-        <p class="file"> To check if file is uploaded: {{post.file}}</p>
+
+        {% if post.file %}
+               <p class="file"> File: {{post.file}}</p>
+              {% else %}
+            <p> File: N/A </p>
+              {% endif %}
         <hr>
 
         </div>
