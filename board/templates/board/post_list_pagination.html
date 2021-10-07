@@ -1,0 +1,162 @@
+
+{% load pagination_extras %}
+{% block title %}notice board{% endblock %}
+
+{% block body %}
+    <!-- post list -->
+    <div class="btn_post">
+        <h3><a href="{% url 'board:notice-board' %}"> Post List </a> | <a href="{% url 'board:post-create'%}"> Post </a> </h3>
+        <hr>
+    </div>
+
+    {% if object_list.exists %}
+    <table class="table">
+            <tr>
+              <th>#</th>
+              <th>POST ID</th>
+              <th>title</th>
+              <th>file</th>
+              <th>author</th>
+              <th>date</th>
+            </tr>
+        <tbody>
+            <tr>
+        {% for post in object_list %}
+              <td> {% pagination_reverse_numbering paginator page_obj forloop.counter0 %} </td>
+              <td> {{ post.id }} </td>
+              <td style="text-align:left"><a href="{% url 'board:post-detail' post.id %}">
+                    {{ post.title|truncatechars:80 }}</a></td>
+              {% if post.file %}
+                <td> Y </td>
+              {% else %}
+                <td> N/A </td>
+              {% endif %}
+              <td>{{ post.author.username }}</td>
+              <td>{{ post.post_date|date:'Y-m-d'}}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+<!--1111111111111111111111111 1 Pagination 1111111111111 1111111111111 -->
+<!--        <div class="paginator">-->
+<!--        <hr>-->
+<!--            {% if page_obj.has_previous %}-->
+<!--                <a href="?page=1" class="first">first</a>-->
+<!--                <a href="?page={{page_obj.previous_page_number}}" class="prev">prev</a>-->
+<!--            {% endif %}-->
+
+<!--            <span class="page">-->
+<!--                <p>{{page_obj.number}} of {{page_obj.paginator.num_pages}}</p>-->
+<!--            </span>-->
+
+<!--            {% if page_obj.has_next %}-->
+<!--                <a href="?page={{page_obj.next_page_number}}" class="next">next</a>-->
+<!--                <a href="?page={{page_obj.paginator.num_pages}}" class="last">last</a>-->
+<!--            {% endif %}-->
+<!--        </div>-->
+<!--        <br>-->
+
+<!--    {% else %}-->
+<!--        <div class="blank">-->
+<!--            <p>No post yet.</p>-->
+<!--        </div>-->
+<!--    {% endif %}-->
+
+<!-- 222222222222222 pagination 2222222222222222222222222222222-->
+
+<!--{% if is_paginated %}-->
+<!--<ul class="pagination">-->
+<!--    {% if page_obj.has_previous %}-->
+<!--    <li class="page-item">-->
+<!--        <a class="page-link" href="?page={{ page_obj.previous_page_number }}"-->
+<!--            tabindex="-1">이전</a>-->
+<!--    </li>-->
+<!--    {% else %}-->
+<!--    <li class="page-item disabled">-->
+<!--        <a class="page-link" href="#" tabindex="-1">이전</a>-->
+<!--    </li>-->
+<!--    {% endif %}-->
+
+<!--    {% for page in page_range %}-->
+<!--    <li class="page-item {% if page == page_obj.number %} activate {% endif %}">-->
+<!--        <a class="page-link" href="?page={{ page }}">{{ page }}</a>-->
+<!--    </li>-->
+<!--    {% endfor %}-->
+
+<!--    {% if page_obj.has_next %}-->
+<!--    <li class="page-item">-->
+<!--        <a class="page-link"-->
+<!--            href="?page={{ page_obj.next_page_number }}">다음</a>-->
+<!--    </li>-->
+<!--    {% else %}-->
+<!--    <li class="page-item disabled">-->
+<!--        <a class="page-link" href="#">다음</a>-->
+<!--    </li>-->
+<!--    {% endif %}-->
+<!--</ul>-->
+<!--{% endif %}-->
+
+<!-- 3333333333333333333333333 pagination 333333333333333333333333333333-->
+
+<div class="row justify-content-md-center ">
+    <div class="col-md-8">
+      {% if is_paginated %}
+<!-- Previous -->
+          {% if page_obj.has_previous %}
+             <a class="btn-sm mb-4 page-btn" href="?page=1">First</a>
+             <a class="btn-sm mb-4 page-btn" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+          {% endif%}
+<!-- List -->
+          {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+              <a class="btn-sm page-active mb-4" href="?page={{ num }}">{{ num }}</a>
+          {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+              <a class="btn-sm mb-4 page-btn" href="?page={{ num }}">{{ num }}</a>
+          {% endif %}
+          {% endfor %}
+<!--   Next       -->
+          {% if page_obj.has_next %}
+             <a class="btn-sm mb-4 page-btn" href="?page={{ page_obj.next_page_number}}">&raquo;</a>
+             <a class="btn-sm mb-4 page-btn" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+          {% endif%}
+      {% endif %}
+    </div>
+</div>
+
+
+
+
+<!-- FILTER -->
+
+    <form method="get" class="form-style">
+        <div class="search-bar">
+
+            <label for="id_title__icontains"> search </label>
+            <input type="text" name="title__icontains" class="form-control is-valid form-style" placeholder="enter text" title="" id="id_title__icontains">
+
+            <label for="id_body__icontains">by content</label>
+            <input type="text" name="body__icontains" class="form-control is-valid" placeholder="enter text" title="" id="id_body__icontains">
+
+            <input class="btn btn-primary" type="submit" name="btnsubmit" value="search">
+            <input type="reset" value="reset" style="padding: 4px;">
+
+
+        </div>
+            <br>
+    </form>
+
+<style>
+    table {
+        width: 100%;
+        text-align: center;
+
+        border-collapse: collapse;
+      }
+    th, td {
+        padding: 10px;
+
+      }
+
+</style>
+
+{% endblock body %}
