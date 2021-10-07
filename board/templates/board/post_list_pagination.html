@@ -35,7 +35,9 @@
               <td>{{ post.post_date|date:'Y-m-d'}}</td>
             </tr>
         </tbody>
+
         {% endfor %}
+                {% endif %}
     </table>
 <!--1111111111111111111111111 1 Pagination 1111111111111 1111111111111 -->
 <!--        <div class="paginator">-->
@@ -97,7 +99,7 @@
 <!--{% endif %}-->
 
 <!-- 3333333333333333333333333 pagination 333333333333333333333333333333-->
-
+<!--PAGINATION start -->
 <div class="row justify-content-md-center ">
     <div class="col-md-8">
       {% if is_paginated %}
@@ -108,11 +110,11 @@
           {% endif%}
 <!-- List -->
           {% for num in page_obj.paginator.page_range %}
-          {% if page_obj.number == num %}
-              <a class="btn-sm page-active mb-4" href="?page={{ num }}">{{ num }}</a>
-          {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
-              <a class="btn-sm mb-4 page-btn" href="?page={{ num }}">{{ num }}</a>
-          {% endif %}
+              {% if page_obj.number == num %}
+                  <a class="btn-sm page-active mb-4" href="?page={{ num }}">{{ num }}</a>
+              {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+                  <a class="btn-sm mb-4 page-btn" href="?page={{ num }}">{{ num }}</a>
+              {% endif %}
           {% endfor %}
 <!--   Next       -->
           {% if page_obj.has_next %}
@@ -122,7 +124,7 @@
       {% endif %}
     </div>
 </div>
-
+<!--PAGINATION end -->
 
 
 

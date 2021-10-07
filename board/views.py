@@ -5,6 +5,7 @@ from django.views.generic import (ListView, DetailView, CreateView, UpdateView, 
 from .models import Post
 from .filters import PostFilter
 #from .forms import PostForm, EditForm
+
 from django.contrib import messages
 from django.db.models import Q
 
@@ -13,7 +14,34 @@ class PostListView(ListView):
     template_name = 'board/post_list.html'
     ordering = ['-post_created']
     paginate_by = 5
+    context_object_name = 'object_list'
 
+    def get_queryset(self):
+        object_list = Post.objects.order_by('-id')
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(PostListView, self).get_context_data(**kwargs)
+        paginator = context['paginator']
+        page_numbers_range = 5
+        max_index = len(paginator.page_range)
+
+        page = self.request.GET.get('page')
+        current_page = int(page) if page else 1
+
+        start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
+        end_index = start_index + page_numbers_range
+        if end_index >= max_index:
+            end_index = max_index
+
+        page_range = paginator.page_range #[start_index:end_index]
+        context['page_range'] = page_range
+
+        return context
+
+
+
+# title, body 각각 검색
     # def get_queryset(self):
     #     queryset = super(PostListView, self).get_queryset()
     #     filter = PostFilter(self.request.GET, queryset)
@@ -30,32 +58,22 @@ class PostListView(ListView):
 #             if len(search_keyword) > 1:
 #                 if search_type == 'all':
 #                     search_notice_list = notice_list.filter(
-#                         Q(title__icontains=search_keyword) | Q(body__icontains=search_keyword) | Q(
-#                             author__user_id__icontains=search_keyword))
+#                         Q(title__icontains=search_keyword) | Q(content__icontains=search_keyword) | Q(
+#                             writer__user_id__icontains=search_keyword))
 #                 elif search_type == 'title_content':
 #                     search_notice_list = notice_list.filter(
-#                         Q(title__icontains=search_keyword) | Q(body__icontains=search_keyword))
+#                         Q(title__icontains=search_keyword) | Q(content__icontains=search_keyword))
 #                 elif search_type == 'title':
 #                     search_notice_list = notice_list.filter(title__icontains=search_keyword)
-#                 elif search_type == 'body':
-#                     search_notice_list = notice_list.filter(body__icontains=search_keyword)
-#                 elif search_type == 'author':
-#                     search_notice_list = notice_list.filter(author__user_id__icontains=search_keyword)
+#                 elif search_type == 'content':
+#                     search_notice_list = notice_list.filter(content__icontains=search_keyword)
+#                 elif search_type == 'writer':
+#                     search_notice_list = notice_list.filter(writer__user_id__icontains=search_keyword)
 #
 #                 return search_notice_list
 #             else:
 #                 messages.error(self.request, '검색어는 2글자 이상 입력해주세요.')
 #         return notice_list
-#
-#     def get_context_data(self, **kwargs):
-#         search_keyword = self.request.GET.get('q', '')
-#         search_type = self.request.GET.get('type', '')
-#
-#         if len(search_keyword) > 1:
-#             context['q'] = search_keyword
-#         context['type'] = search_type
-#
-#         return context
 
 class PostDetailView(DetailView):
     model = Post
