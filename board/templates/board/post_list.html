@@ -1,31 +1,38 @@
-{% extends './base.html' %}
-{% load pagination_extras %}
 
-{% block content %}
-<!-- post list -->
+{% load pagination_extras %}
+{% block title %}notice board{% endblock %}
+
+{% block body %}
+    <!-- post list -->
     <div class="btn_post">
-        <h3>Post List | <a href="{% url 'board:post-create'%}">Post</a></h3>
+        <h3><a href="{% url 'board:notice-board' %}"> Post List </a> | <a href="{% url 'board:post-create'%}"> Post </a> </h3>
         <hr>
     </div>
-{% if object_list.exists %}
+
+    {% if object_list.exists %}
     <table class="table">
             <tr>
-              <th>id</th>
-              <th>number</th>
+              <th>#</th>
+              <th>POST ID</th>
               <th>title</th>
+              <th>file</th>
               <th>author</th>
               <th>date</th>
             </tr>
         <tbody>
-
             <tr>
-                {% for post in object_list %}
-              <td>{{ post.id}}</td>
-              <td> {% pagination_reverse_numbering paginator page_obj forloop.counter0 %}</td>
+        {% for post in object_list %}
+              <td> {% pagination_reverse_numbering paginator page_obj forloop.counter0 %} </td>
+              <td> {{ post.id }} </td>
               <td style="text-align:left"><a href="{% url 'board:post-detail' post.id %}">
-                    {{ post.title }}</a></td>
+                    {{ post.title|truncatechars:80 }}</a></td>
+              {% if post.file %}
+                <td> Y </td>
+              {% else %}
+                <td> N/A </td>
+              {% endif %}
               <td>{{ post.author.username }}</td>
-              <td>{{ post.post_date}}</td>
+              <td>{{ post.post_date|date:'Y-m-d'}}</td>
             </tr>
         </tbody>
         {% endfor %}
@@ -56,25 +63,36 @@
     {% endif %}
 
 <!-- FILTER -->
-    <h3>Search</h3>
-    <form method="get" class="form-style">
-        <div class="bytitle">
-            <label for="id_title__icontains">by Title</label>
-            <input type="text" name="title__icontains" class="form-control is-valid form-style" placeholder="enter text" title="" id="id_title__icontains">
-        </div>
 
-        <div class="bybody">
+    <form method="get" class="form-style">
+        <div class="search-bar">
+
+            <label for="id_title__icontains"> search </label>
+            <input type="text" name="title__icontains" class="form-control is-valid form-style" placeholder="enter text" title="" id="id_title__icontains">
+
             <label for="id_body__icontains">by content</label>
             <input type="text" name="body__icontains" class="form-control is-valid" placeholder="enter text" title="" id="id_body__icontains">
+
+            <input class="btn btn-primary" type="submit" name="btnsubmit" value="search">
+            <input type="reset" value="reset" style="padding: 4px;">
+
+
         </div>
-
             <br>
-            <div class="button">
-                <input type="submit" name="btnsubmit"  value="search">
-                <input type="reset" value="reset">
-                <a href="{% url 'board:notice-board' %}">Refresh</a>
-            </div>
     </form>
-</div>
 
-{% endblock content %}
+<style>
+    table {
+        width: 100%;
+        text-align: center;
+
+        border-collapse: collapse;
+      }
+    th, td {
+        padding: 10px;
+
+      }
+
+</style>
+
+{% endblock body %}

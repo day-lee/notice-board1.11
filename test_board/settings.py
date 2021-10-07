@@ -79,7 +79,7 @@ TEMPLATES = [
             ],
         'libraries':  {
                         'pagination_extras': 'board.templatetags.pagination_extras',
-                    }
+                    },
         },
     },
 ]
