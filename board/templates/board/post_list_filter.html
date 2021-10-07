@@ -1,0 +1,176 @@
+{% load pagination_extras %}
+{% block title %}notice board{% endblock %}
+
+ <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+
+{% block body %}
+    <!-- post list -->
+    <div class="btn_post">
+        <h3><a href="{% url 'board:notice-board' %}"> Post List </a> | <a href="{% url 'board:post-create'%}"> Post </a> </h3>
+        {% if q %}
+            <h5><i class="fas fa-search"></i>&nbsp;'{{ q }}' 검색 결과입니다.</h5>
+        {% else %}
+            <h5><i class="fas fa-check"></i> 공지사항 리스트입니다.</h5>
+        {% endif %}
+        <hr>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+              <th>#</th>
+              <th>POST ID</th>
+              <th>title</th>
+              <th>file</th>
+              <th>author</th>
+              <th>date</th>
+            </tr>
+        {% if q %}
+        {% else %}
+        {% if object_list %}
+        {% for post in object_list %}
+              <td> {% pagination_reverse_numbering paginator page_obj forloop.counter0 %} </td>
+              <td> {{ post.id }} </td>
+              <td style="text-align:left"><a href="{% url 'board:post-detail' post.id %}">
+                    {{ post.title|truncatechars:80 }}</a></td>
+              {% if post.file %}
+                <td> Y </td>
+              {% else %}
+                <td> N/A </td>
+              {% endif %}
+              <td>{{ post.author }}</td>
+              <td>{{ post.post_date|date:'Y-m-d'}}</td>
+            </tr>
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+        </thead>
+
+        <tbody>
+        {% if object_list %}
+        {% for post in object_list %}
+         <tr>
+              <td> {% pagination_reverse_numbering paginator page_obj forloop.counter0 %} </td>
+              <td> {{ post.id }} </td>
+              <td style="text-align:left"><a href="{% url 'board:post-detail' post.id %}">
+                    {{ post.title|truncatechars:80 }}</a></td>
+              {% if post.file %}
+                <td> Y </td>
+              {% else %}
+                <td> N/A </td>
+              {% endif %}
+              <td>{{ post.author }}</td>
+              <td>{{ post.post_date|date:'Y-m-d'}}</td>
+         </tr>
+         {% endfor %}
+         {% else %}
+                    {% if q %}
+                    <tr class="text-center">
+                        <td>
+                            <i class="fas fa-info-circle"></i>&nbsp;일치하는 검색 결과가 없습니다.
+                        </td>
+                    </tr>
+                    {% else %}
+                        <tr class="text-center">
+                            <td>
+                                <i class="fas fa-info-circle"></i>&nbsp;작성된 게시글이 없습니다.
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+        </tbody>
+    </table>
+<!--LIST TABLE end-->
+
+<!--FILTER start-->
+        <form action="" method="GET">
+            <div class="col">
+                <div style="float: right;" class="form-row">
+                    <div class="form-row">
+                        <div class="col" style="margin-top: 10px;">
+                            <select style="width: 6em;" class="custom-select custom-select-md" name="type">
+                                <option value="all">전체</option>
+                                <option value="title_body">제목+내용</option>
+                                <option value="title">제목</option>
+                                <option value="body">내용</option>
+                                <option value="author__username">작성자</option>
+                            </select>
+                        </div>
+                        <div class="col" style="margin-top: 10px;">
+                            <input type="text" name="q" value="{{ q }}" class="form-control form-control-md"
+                                style="width: 15em;" placeholder="검색어를 입력해주세요.">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-sm" type="submit" id="search_btn">검색</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+<!--FILTER end-->
+
+<!--PAGINATION start-->
+{% if is_paginated %}
+<ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?type={{ type }}&q={{ q }}&page={{ page_obj.previous_page_number }}"
+            tabindex="-1">이전</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">이전</a>
+    </li>
+    {% endif %}
+
+    {% for page in page_range %}
+    <li class="page-item {% if page == page_obj.number %} activate {% endif %}">
+        <a class="page-link" href="?type={{ type }}&q={{ q }}&page={{ page }}">{{ page }}</a>
+    </li>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <li class="page-item">
+        <a class="page-link"
+            href="?type={{ type }}&q={{ q }}&page={{ page_obj.next_page_number }}">다음</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+        <a class="page-link" href="#">다음</a>
+    </li>
+    {% endif %}
+</ul>
+{% endif %}
+<!--PAGINATION end -->
+
+
+<style>
+    table {
+        width: 100%;
+        text-align: center;
+
+        border-collapse: collapse;
+      }
+    th, td {
+        padding: 10px;
+        font-weight: bold;
+        color:gray;
+      }
+    h5 {
+        color: gray;
+        font-weight: 550;
+        }
+</style>
+
+<script type="text/javascript">
+    target = window.location.search.split('&')[0].split('=')[1]
+    var type = document.getElementsByTagName('option')
+    for (var i = 0; i < 5; i++) {
+        if (type[i].value === target) {
+            type[i].setAttribute('selected', 'selected')
+        }
+    }
+</script>
+
+{% endblock body %}
