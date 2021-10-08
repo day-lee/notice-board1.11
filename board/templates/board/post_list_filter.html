@@ -26,25 +26,6 @@
               <th>author</th>
               <th>date</th>
             </tr>
-        {% if q %}
-        {% else %}
-        {% if object_list %}
-        {% for post in object_list %}
-              <td> {% pagination_reverse_numbering paginator page_obj forloop.counter0 %} </td>
-              <td> {{ post.id }} </td>
-              <td style="text-align:left"><a href="{% url 'board:post-detail' post.id %}">
-                    {{ post.title|truncatechars:80 }}</a></td>
-              {% if post.file %}
-                <td> Y </td>
-              {% else %}
-                <td> N/A </td>
-              {% endif %}
-              <td>{{ post.author }}</td>
-              <td>{{ post.post_date|date:'Y-m-d'}}</td>
-            </tr>
-        {% endfor %}
-        {% endif %}
-        {% endif %}
         </thead>
 
         <tbody>
