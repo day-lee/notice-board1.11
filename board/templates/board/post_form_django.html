@@ -27,4 +27,14 @@
     <div class="btn_back">
         <a href="{% url 'board:notice-board' %}" >Return to post list</a>
     </div>
+
+
+<script type="text/javascript">
+    let name = "{{ user.id }}";
+    document.getElementById("id_author").value = name;
+    document.getElementById("id_author").style.visibility= "hidden";
+</script>
+
+
+
 {% endblock content %}
